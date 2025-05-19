@@ -1,0 +1,60 @@
+<div class="col-md-6 offset-md-3">
+    <h3 class="text-center">Registro de Categorias</h3>
+    <form action="" (ngSubmit)="onSubmit()" #idiomaForm="ngForm">
+    <div class="from-group">
+        <label>Nombre de la categoria</label>
+        <input type="text" class="form-control borde-negro" 
+            id="nombrecategoria" 
+            [(ngModel)]="categoria.nombreCategoria" 
+            required
+            name="nombrecategoria" 
+            placeholder="Digite el nombre del idioma" 
+            minlength="4" 
+            maxlength="20" 
+            #nombre ="ngModel"/>
+        <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+            <div *ngIf="nombre.errors && nombre.errors['required']">
+                    digite un nombre de la categoria por favor
+            </div>
+              <div *ngIf="nombre.errors && nombre.errors['minlength']">
+                    El nombre de la categoria debe tener al menos 4 caracteres
+            </div>
+              <div *ngIf="nombre.errors && nombre.errors['maxlength']">
+                    EL nombre de la categoria no puede tener más de 20 caracteres
+            </div>
+            
+        </div>
+
+    </div>
+    <div class="from-group">
+        <label>Descripcion</label>
+        <input 
+        type="text" 
+        class="form-control borde-negro" 
+        id="descripcion" 
+        [(ngModel)]="categoria.descripcion" 
+        required
+        name="descripcion" 
+        placeholder="Digite la descripcion"
+        #apellido ="ngModel"
+        maxlength="20"
+        minlength="2"/>
+
+        <div class="alert alert-danger" *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
+            <div *ngIf="apellido.errors && apellido.errors['required']">
+                    digite un codigoISO por favor
+            </div>
+              <div *ngIf="apellido.errors && apellido.errors['minlength']">
+                    El codigoISO debe tener al menos 4 caracteres
+            </div>
+              <div *ngIf="apellido.errors && apellido.errors['maxlength']">
+                    EL codigoISO no puede tener más de 20 caracteres
+            </div>
+            
+        </div>
+
+    </div>
+        <button class="btn btn-success" [disabled]="!idiomaForm.form.valid">Guardar</button>
+    </form>
+<button class="btn btn-info" (click)="irALaListaCategorias()">volver</button>
+</div>

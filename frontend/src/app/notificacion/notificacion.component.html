@@ -1,0 +1,37 @@
+ <div class="container">
+      <h2>Notificaciones</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Mensaje</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let notificacion of notificaciones">
+            <td>{{ notificacion.idNotificacion }}</td>
+            <td>{{ notificacion.tituloMaterial }}</td>
+            <td>{{ notificacion.mensaje }}</td>
+            <td>{{ notificacion.fechaNotificacion | date:'medium' }}</td>
+            <td>
+              <span [class.badge-warning]="!notificacion.leida" 
+                    [class.badge-success]="notificacion.leida"
+                    class="badge">
+                {{ notificacion.leida ? 'Leída' : 'No leída' }}
+              </span>
+            </td>
+            <td>
+              <button *ngIf="!notificacion.leida" 
+                      (click)="marcarComoLeida(notificacion.idNotificacion)"
+                      class="btn btn-sm btn-primary">
+                Marcar como leída
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>

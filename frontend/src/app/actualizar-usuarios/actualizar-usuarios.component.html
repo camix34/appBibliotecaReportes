@@ -1,0 +1,55 @@
+<div class="p-4">
+
+  <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+ <!--<label>Nombre:</label>
+  <input type="text" formControlName="nombre" />--> 
+              <div class="row g-3">
+                  <div class="col-md-2">
+                  <label class="form-label">Nombre de usuario</label>
+                  <input type="text" class="form-control borde-negro" formControlName="nombre">  
+              </div>
+
+            <!-- Contraseña -->
+            <div class="col-md-2">
+                <label class="form-label">Contraseña</label>
+                <div class="input-group">
+                  <input 
+                    [type]="showPassword ? 'text' : 'password'"
+                    class="form-control borde-negro"
+                    formControlName="password"/>
+                
+                </div>
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="togglePassword()"
+                tabindex="-1">
+                <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+              </button>
+              
+            </div>
+            <!--<label for="rol">Rol:</label>
+          <select formControlName="roleEnum" name="rol" required>
+            <option *ngFor="let rol of roles" [value]="rol.roleEnum">{{ rol.roleEnum }}</option>
+          </select>
+          -->
+          <div class="col-md-2">
+                  <label class="form-label">Rol</label>
+                  <select class="form-select borde-negro" formControlName="roleEnum">
+                    <option value="" disabled selected>Seleccione rol</option>
+                    <option *ngFor="let role of roles" [value]="role.roleEnum">{{ role.roleEnum }}</option>
+                  </select>
+                
+                </div>
+            
+           
+            
+
+     </div>
+    <div class="mt-2">
+                  <button (click)="onSubmit()" type="submit" class="btn btn-info me-2">
+                     <i class="fa-solid fa-user-plus"></i>Actualizar</button>
+                  <button (click)="irAlaListaUsuarios()" type="submit" class="btn btn-danger">Volver</button>
+    </div>
+</form>
+</div>

@@ -1,0 +1,46 @@
+<div class="container mt-4">
+  <h2>Mis historial Préstamos</h2>
+  
+  <!-- Campo de búsqueda -->
+  <div class="mb-3">
+<h4>Buscar material</h4>
+    <input type="text" class="form-control borde-negro" placeholder="Buscar material..." [(ngModel)]="filtroBusqueda">
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>ID Historial</th>
+          <th>Usuario</th>
+          <th>id prestamo</th>
+          <th>Titulo Material</th>
+          <th>Fecha Préstamo</th>
+          <th>Fecha Devolución</th>
+          <th>Fecha Registro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Usamos materialesFiltrados() para mostrar los datos filtrados -->
+        <tr *ngFor="let item of materialesFiltrados() | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+          <td>{{ item.idHistorial }}</td>
+          <td>{{ item.idUsuario }}</td>
+          <td>{{ item.prestamo }}</td>
+          <td>{{ item.material?.titulo || 'N/A' }}</td>
+          <td>{{ item.fechaPrestamo | date:'dd/MM/yyyy' }}</td>
+          <td>{{ item.fechaDevolucion ? (item.fechaDevolucion | date:'dd/MM/yyyy') : 'Pendiente' }}</td>
+          <td>{{ item.fechaRegistro | date:'dd/MM/yyyy' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  <div class="d-flex justify-content-center">
+    <pagination-controls 
+      (pageChange)="p = $event" 
+      previousLabel="Anterior" 
+      nextLabel="Siguiente"
+      class="my-pagination">
+    </pagination-controls>
+  </div>
+</div>

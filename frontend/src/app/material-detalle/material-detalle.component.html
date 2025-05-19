@@ -1,0 +1,35 @@
+<h3>Detalles del material</h3>
+<div>
+    <div>
+        <label for=""><b>ID: </b>{{Material.id_material}}</label>
+    </div>
+     <div>
+        <label for=""><b>Titulo: </b>{{Material.titulo}}</label>
+
+    </div>
+     <div>
+        <label ><b>Autor: </b>{{Material.autor}}</label>
+    </div>
+     <div>
+        <label ><b>Imagen portada:</b></label>
+        <img [src]="'http://localhost:8080' + Material.imagen_portada" alt="Imagen" width="200">
+    </div>
+      <div>
+        <label ><b>categoria: </b>{{Material.idCategoria?.nombreCategoria}}</label>
+    </div>
+    <div>
+        <label ><b>Idioma: </b>{{Material.idIdioma?.nombreIdioma}}</label>
+    </div>
+      <div>
+        <label ><b>Stock Disponible: </b>{{Material.stockdisponible}}</label>
+    </div>
+      <div>
+        <label ><b>Tipo de material: </b>{{Material.tipomaterial}}</label>
+    </div>
+      <div>
+        <label ><b>Año de publicacion: </b>{{Material.aniopublicacion}}</label>
+    </div>
+
+    <button (click)="volveraMateriales()" class="btn btn-success">Volver</button>
+</div>
+

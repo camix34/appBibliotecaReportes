@@ -1,0 +1,39 @@
+<h2>Lista de categorias</h2>
+ <input type="text" class="form-control borde-negro" placeholder="Buscar material..." [(ngModel)]="filtroBusqueda">
+<button class="btn btn-info" (click)="agregarCategoria()">Agregar categoria</button>
+<table class="table table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>id</th>
+      <th>Idioma nombre</th>
+      <th>CodigoISO</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr *ngFor="let item of categoriasFiltradas() | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+      <td>{{ item.id }}</td>
+      <td>{{ item.nombreCategoria }}</td>
+      <td>{{ item.descripcion }}</td>
+      <td>
+         <button (click)="verDetallerCategoria(item.id)" class="btn btn-success"><i class="fa-solid fa-eye"></i>
+          ver</button>
+        <button (click)="actualizarCaregoria(item.id)" class="btn btn-info">actualizar</button>
+        <button (click)="eliminarCategoria(item.id)" class="btn btn-danger">Eliminar</button>
+       
+      </td>
+    </tr>
+  </tbody>
+
+   <!-- Paginación -->
+  <div class="d-flex justify-content-center">
+    <pagination-controls 
+      (pageChange)="p = $event" 
+      previousLabel="Anterior" 
+      nextLabel="Siguiente"
+      class="my-pagination">
+    </pagination-controls>
+  </div>
+
+</table>
+

@@ -1,0 +1,63 @@
+<div>
+    <div>
+        <label><b>ID:</b> {{ idusuario }}</label>
+    </div>
+
+    <div>
+        <label><b>Nombre:</b> {{ nombre }}</label>
+    </div>
+     <div>
+        <label><b>Carnet:</b> {{ carnet }}</label>
+    </div>
+    <div>
+        <label><b>Primer apellido:</b> {{ apellido1 }}</label>
+    </div>
+    <div>
+        <label><b>Segundo apellido:</b> {{ apellido2 }}</label>
+    </div>
+    <div>
+        <label><b>Email:</b> {{ email }}</label>
+    </div>
+    <div>
+        <label><b>Telefono:</b> {{ telefono }}</label>
+    </div>
+    <div>
+        <label><b>Ocupacion:</b> {{ tipo }}</label>
+    </div>
+    <div>
+        <label><b>Direccion:</b> {{ direccion }}</label>
+    </div>
+    
+       <div *ngIf="tipo === 'ESTUDIANTE'">
+    <div>
+        <label><b>Carrera:</b> {{ carrera }}</label>
+    </div>
+    <div>
+        <label><b>Facultad:</b> {{ facultad }}</label>
+    </div>
+</div>
+
+        <div *ngIf="tipo === 'BIBLIOTECARIO'">
+            <div>
+                <label><b>Dui:</b> {{ dui }}</label>
+            </div>
+            <div>
+                <label><b>Area de trabajo:</b> {{ area }}</label>
+            </div>
+        </div>
+      
+        <div>
+
+        <label><b>Fecha de creacion de usuario:</b> {{ fecha_registro }}</label>
+    </div>
+   <div>
+    <b>Roles de usuario:</b> 
+        <label >{{ roles }}</label>
+    </div>
+    
+
+    <div>
+             <button type="button"  (click)="volver()" class="btn btn-danger">Volver</button>
+        </div>
+    
+</div>

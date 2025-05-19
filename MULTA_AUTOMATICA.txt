@@ -1,0 +1,71 @@
+create or replace TRIGGER TRG_MULTA_AUTOMATICA
+BEFORE INSERT OR UPDATE ON PRESTAMO
+FOR EACH ROW
+DECLARE
+    v_dias_retraso NUMBER;
+    v_monto_multa NUMBER;
+    v_existe_multa NUMBER;
+    v_id_multa NUMBER;
+    v_fecha_comparacion DATE;
+BEGIN
+    -- Usar fecha actual si no hay devolución real
+    v_fecha_comparacion := NVL(:NEW.FECHA_DEVOLUCION_REAL, SYSDATE);
+
+    -- Calcular días de retraso (solo si la fecha de devolución ya pasó)
+    IF v_fecha_comparacion > :NEW.FECHA_DEVOLUCION THEN
+        v_dias_retraso := v_fecha_comparacion - :NEW.FECHA_DEVOLUCION;
+
+        -- Verificar si ya existe multa para este préstamo
+        SELECT COUNT(*) INTO v_existe_multa 
+        FROM MULTA 
+        WHERE IDPRESTAMO = :NEW.ID_PRESTAMO;
+
+        -- Solo crear multa si no existe o si el retraso aumentó
+        IF v_existe_multa = 0 THEN
+            -- Calcular monto (ejemplo: 10 por día de retraso)
+            v_monto_multa := v_dias_retraso * 10;
+
+            -- Insertar nueva multa
+            INSERT INTO MULTA (
+                MONTO,
+                FECHAGENERADA,
+                IDPRESTAMO,
+                DIAS_RETRASO
+            ) VALUES (
+                v_monto_multa,
+                SYSDATE,
+                :NEW.ID_PRESTAMO,
+                v_dias_retraso
+            ) RETURNING ID_MULTA INTO v_id_multa;
+
+            -- Penalización por retraso grave (>7 días)
+            IF v_dias_retraso >= 7 THEN
+                INSERT INTO USUARIOS_MORA (
+
+                    IDMULTA,
+                    ESTADOPENALIZACION,
+                    FECHA_REGISTRO
+                ) VALUES (
+
+                    v_id_multa,
+                    1, -- Penalización activa
+                    SYSDATE
+                );
+
+
+            END IF;
+        ELSE
+            -- Actualizar multa existente si el retraso aumentó
+            SELECT ID_MULTA INTO v_id_multa
+            FROM MULTA
+            WHERE IDPRESTAMO = :NEW.ID_PRESTAMO
+            AND ROWNUM = 1;
+
+            UPDATE MULTA SET
+                MONTO = v_dias_retraso * 10,
+                DIAS_RETRASO = v_dias_retraso,
+                FECHAGENERADA = SYSDATE
+            WHERE ID_MULTA = v_id_multa;
+        END IF;
+    END IF;
+END;
