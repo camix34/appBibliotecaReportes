@@ -1,0 +1,54 @@
+create or replace TRIGGER tr_notificar_prestamo_por_vencer
+AFTER INSERT OR UPDATE ON prestamo
+FOR EACH ROW
+DECLARE
+    v_dias_para_vencer NUMBER;
+    v_titulo_material VARCHAR2(255);
+BEGIN
+    -- Obtener el título del material (asumiendo que existe una tabla MATERIALES)
+    BEGIN
+        SELECT titulo INTO v_titulo_material
+        FROM material
+        WHERE id_material = :NEW.id_material;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            v_titulo_material := 'Material desconocido';
+    END;
+
+    -- Calcular días restantes para vencer
+    v_dias_para_vencer := :NEW.fecha_devolucion - TRUNC(SYSDATE);
+
+    -- Si el préstamo vence exactamente en 1 día
+    IF v_dias_para_vencer = 1 THEN
+        -- Verificar si ya existe notificación para evitar duplicados
+        DECLARE
+            v_existe_notificacion NUMBER;
+        BEGIN
+            SELECT COUNT(*) INTO v_existe_notificacion
+            FROM notificaciones_prestamo
+            WHERE id_prestamo = :NEW.id_prestamo
+            AND TRUNC(fecha_notificacion) = TRUNC(SYSDATE);
+
+            IF v_existe_notificacion = 0 THEN
+                INSERT INTO notificaciones_prestamo (
+                    id_prestamo, 
+                    id_usuario, 
+                    titulo_material, 
+                    mensaje,
+                    fecha_notificacion
+                )
+                VALUES (
+                    :NEW.id_prestamo,
+                    :NEW.id_usuario,
+                    v_titulo_material,
+                    'El préstamo de "' || v_titulo_material || '" vence mañana (Préstamo ID: ' || :NEW.id_prestamo || ')',
+                    SYSDATE
+                );
+            END IF;
+        END;
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error en trigger tr_notificar_prestamo_por_vencer: ' || SQLERRM);
+        -- Considerar registrar el error en una tabla de log si es necesario
+END;
