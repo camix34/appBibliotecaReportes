@@ -28,7 +28,7 @@ export class ActualizarCategoriaComponent implements OnInit {
     }, error => console.log(error));
   }
 
-  onSubmit() {
+ onSubmit() {
     Swal.fire({
       title: '¿Estás seguro?',
       text: '¿Deseas actualizar esta categoría?',
@@ -40,9 +40,43 @@ export class ActualizarCategoriaComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.categoriaServicio.actualizarCategoria(this.id, this.categoria).subscribe(data => {
-          this.irALaListaCategorias();
-        }, error => console.log(error));
+        this.categoriaServicio.actualizarCategoria(this.id, this.categoria).subscribe({
+          next: (data) => {
+            Swal.fire({
+              title: '¡Éxito!',
+              text: 'La categoría se ha actualizado correctamente',
+              icon: 'success',
+              confirmButtonText: 'Aceptar'
+            }).then(() => {
+              this.irALaListaCategorias();
+            });
+          },
+          error: (error) => {
+            console.error(error);
+            let errorMessage = 'Ocurrió un error al actualizar la categoría';
+            
+            // mensaje personalisado dependienfo del tipo de error que ocurrio
+            if (error.status === 400) {
+              errorMessage = error.error.message || 'Datos inválidos para la categoría';
+            } else if (error.status === 404) {
+              errorMessage = 'La categoría no fue encontrada';
+            } else if (error.status === 409) {
+              errorMessage = 'Ya existe una categoría con ese nombre';
+            } else if (error.status === 0) {
+              errorMessage = 'No se pudo conectar con el servidor';
+            }else {
+              errorMessage = 'Verifique que la descripcion no sea mayor a 20 caracteres';
+            }
+
+
+            Swal.fire({
+              title: 'Error',
+              text: errorMessage,
+              icon: 'error',
+              confirmButtonText: 'Aceptar'
+            });
+          }
+        });
       }
     });
   }

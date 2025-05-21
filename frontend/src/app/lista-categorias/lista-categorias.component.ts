@@ -16,7 +16,7 @@ export class ListaCategoriasComponent {
   categoria: Categoria[];
   filtroBusqueda: string = '';
   p: number = 1;  
-  itemsPerPage: number = 5;
+  itemsPerPage: number = 10;
 
 
 

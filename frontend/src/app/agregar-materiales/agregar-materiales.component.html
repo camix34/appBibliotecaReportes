@@ -26,13 +26,13 @@
 
             <div class="alert alert-danger" *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
                 <div *ngIf="apellido.errors?.['required']">
-                    digite un codigoISO por favor
+                    digite un autor por favor
                 </div>
                 <div *ngIf="apellido.errors?.['minlength']">
-                    El codigoISO debe tener al menos 4 caracteres
+                    El autor debe tener al menos 4 caracteres
                 </div>
                 <div *ngIf="apellido.errors?.['maxlength']">
-                    EL codigoISO no puede tener más de 20 caracteres
+                    EL autor no puede tener más de 20 caracteres
                 </div>
 
             </div>
@@ -41,8 +41,8 @@
         <div class="from-group">
             <label>Año publicación</label>
             <input type="number" class="form-control borde-negro" id="aniopublicacion"
-                [(ngModel)]="material.aniopublicacion" required name="aniopublicacion" placeholder="Digite el año de publicacion"
-                #anio="ngModel" maxlength="4" minlength="4" />
+                [(ngModel)]="material.aniopublicacion" required name="aniopublicacion"
+                placeholder="Digite el año de publicacion" #anio="ngModel" maxlength="4" minlength="4" />
 
             <div class="alert alert-danger" *ngIf="anio.invalid && (anio.dirty || anio.touched)">
                 <div *ngIf="anio.errors?.['required']">
@@ -59,20 +59,19 @@
 
         </div>
         <div class="from-group">
-            <label>Tipo de material</label>
+            <label>Codigo ISBN</label>
             <input type="text" class="form-control borde-negro" id="tipomaterial" [(ngModel)]="material.tipomaterial"
-                required name="tipomaterial" placeholder="Digite el tipo de material" #tipo="ngModel" maxlength="20"
-                minlength="4" />
-
+                (ngModelChange)="generarISBN($event)" required name="tipomaterial"
+                placeholder="Digite el tipo de material" #tipo="ngModel" maxlength="20" minlength="4" />
             <div class="alert alert-danger" *ngIf="tipo.invalid && (tipo.dirty || tipo.touched)">
                 <div *ngIf="tipo.errors?.['required']">
-                    digite un año por favor
+                    digite un codigo ISBN
                 </div>
                 <div *ngIf="tipo.errors?.['minlength']">
-                    El tipo de material debe tener al menos 4 caracteres
+                    El ISBN debe tener al menos 4 caracteres
                 </div>
                 <div *ngIf="tipo.errors?.['maxlength']">
-                    EL tipo de material no puede tener más de 4 caracteres
+                    EL ISBN no puede tener más de 4 caracteres
                 </div>
 
             </div>
@@ -116,9 +115,9 @@
         <div class="from-group">
             <label>Categorias</label>
 
-            <select [(ngModel)]="material.idCategoria" name="idCategoria" id="idCategoria" class="form-select" required >
+            <select [(ngModel)]="material.idCategoria" name="idCategoria" id="idCategoria" class="form-select" required>
 
-                <option *ngFor="let cat of categorias" [value]="cat.id" required >
+                <option *ngFor="let cat of categorias" [value]="cat.id" required>
                     {{ cat.nombreCategoria }}
                 </option>
             </select>
@@ -127,9 +126,9 @@
         <div class="from-group">
             <label>Idiomas</label>
 
-            <select [(ngModel)]="material.idIdioma" name="idIdioma" id="idIdioma" class="form-select" required >
+            <select [(ngModel)]="material.idIdioma" name="idIdioma" id="idIdioma" class="form-select" required>
 
-                <option *ngFor="let cat of idiomas" [value]="cat.id" required >
+                <option *ngFor="let cat of idiomas" [value]="cat.id" required>
                     {{ cat.nombreIdioma }}
                 </option>
             </select>

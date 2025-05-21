@@ -1,18 +1,50 @@
 <div class="container mt-4">
-  <h2>Historial de prestamos devueltos</h2>
-  </div>
-    <div class="col-md-6 text-end">
-      <button class="btn btn-primary" (click)="generarPDF()">
-        <i class="fas fa-file-pdf"></i> Exportar a PDF
-      </button>
+  <h2>Historial de préstamos devueltos</h2>
+</div>
+<div class="col-md-6 text-end">
+  <button class="btn btn-primary" (click)="generarPDF()">
+    <i class="fas fa-file-pdf"></i> Exportar a PDF
+  </button>
+</div>
+
+<!-- Filtros de fecha -->
+<div class="row mb-3">
+  <div class="col-md-4">
+    <h4>Filtrar por fecha</h4>
+    <div class="input-group mb-3">
+      <select class="form-select" [(ngModel)]="filtroTipoFecha">
+        <option value="">Seleccionar filtro...</option>
+        <option value="anio">Año</option>
+        <option value="mes">Mes y Año</option>
+      </select>
     </div>
-
+  </div>
   
-  <!-- Campo de búsqueda -->
-  <div class="mb-3">
-<h4>Buscar historial de prestamos devueltos</h4>
-    <input type="text" class="form-control borde-negro" placeholder="Buscar presstamos..." [(ngModel)]="filtroBusqueda">
+  <div class="col-md-4" *ngIf="filtroTipoFecha === 'anio' || filtroTipoFecha === 'mes'">
+    <label>Año</label>
+    <select class="form-select" [(ngModel)]="filtroAnio">
+      <option value="">Todos los años</option>
+      <option *ngFor="let anio of aniosDisponibles" [value]="anio">{{anio}}</option>
+    </select>
+  </div>
+  
+  <div class="col-md-4" *ngIf="filtroTipoFecha === 'mes'">
+    <label>Mes</label>
+    <select class="form-select" [(ngModel)]="filtroMes">
+      <option value="">Todos los meses</option>
+      <option *ngFor="let mes of mesesDisponibles; let i = index" [value]="i+1">{{mes}}</option>
+    </select>
+  </div>
+</div>
 
+<button class="btn btn-secondary" (click)="limpiarFiltros()">
+  <i class="fas fa-times"></i> Limpiar filtros
+</button>
+<!-- Campo de búsqueda -->
+<div class="mb-3">
+  <h4>Buscar historial de préstamos devueltos</h4>
+  <input type="text" class="form-control borde-negro" placeholder="Buscar préstamos..." [(ngModel)]="filtroBusqueda">
+</div>
   <div class="table-responsive">
     <table class="table table-striped table-hover">
       <thead class="table-dark">
@@ -22,7 +54,7 @@
           <th>id prestamo</th>
           <th>Titulo Material</th>
           <th>Fecha Préstamo</th>
-          <th>Fecha Devolución</th>
+          <th>Fecha Vencimient</th>
           <th>Fecha Registro</th>
         </tr>
       </thead>
@@ -33,9 +65,9 @@
           <td>{{ item.nombreUsuario }}</td>
           <td>{{ item.idPrestamo }}</td>
           <td>{{ item.tituloMaterial || 'N/A' }}</td>
-          <td>{{ item.fechaPrestamo | date:'dd/MM/yyyy' }}</td>
-          <td>{{ item.fechaDevolucion ? (item.fechaDevolucion | date:'dd/MM/yyyy') : 'Pendiente' }}</td>
-          <td>{{ item.fechaRegistro | date:'dd/MM/yyyy' }}</td>
+          <td>{{ item.fechaPrestamo  }}</td>
+          <td>{{ item.fechaDevolucion  }}</td>
+          <td>{{ item.fechaRegistro  }}</td>
         </tr>
       </tbody>
     </table>

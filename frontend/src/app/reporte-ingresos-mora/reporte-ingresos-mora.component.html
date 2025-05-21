@@ -3,6 +3,12 @@
     <button class="btn btn-danger mb-3" (click)="generarPDF()">
         Generar PDF
     </button>
+    
+    <!-- Mostrar el total -->
+    <div class="alert alert-success">
+        <h4>Total de ingresos por mora: ${{ totalMora.toFixed(2) }}</h4>
+    </div>
+
     <!-- Campo de búsqueda -->
     <div class="mb-3">
         <h4>Buscar ingresos</h4>
@@ -18,19 +24,17 @@
                     <th>ID Usuario</th>
                     <th>Carnet</th>
                     <th>Nombre Usuario</th>
-                    <th>cantidad</th>
-                    <th>fecha de pago</th>
+                    <th>Cantidad</th>
+                    <th>Fecha de pago</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Usamos ingresosFiltrados() con paginación -->
-                <tr
-                    *ngFor="let ingreso of ingresosFiltrados() | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+                <tr *ngFor="let ingreso of ingresosFiltrados() | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
                     <td>{{ ingreso.id_INGRESO }}</td>
                     <td>{{ ingreso.idusuario }}</td>
                     <td>{{ ingreso.carnet }}</td>
                     <td>{{ ingreso.nombreusuario }}</td>
-                    <td>{{ ingreso.monto }}</td>
+                    <td>{{ ingreso.monto ? (+ingreso.monto | number:'1.2-2') : '0.00' }}</td>
                     <td>{{ ingreso.fecha_PAGO }}</td>
                 </tr>
             </tbody>

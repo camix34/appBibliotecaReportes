@@ -18,6 +18,7 @@ export class ReporteIngresosMoraComponent {
   p: number = 1;  
   itemsPerPage: number = 5;
   ingresos: IngresosMora[];
+  totalMora: number = 0;
 
 
   constructor(private ingrresosMoraServicio: IngresosMoraService, private route:Router) { 
@@ -32,13 +33,20 @@ export class ReporteIngresosMoraComponent {
 
   private obtenerIIngresosMora() {
     this.ingrresosMoraServicio.obtenerListaIngresosMora().subscribe(dato => { 
-
       this.ingresos =dato;
+      this.calcularTotalMora();
     });
-
-
   }
-  // Método para filtrar los ingresos por mora
+
+
+    // calcular el total de ingresos por mora
+  calcularTotalMora(): void {
+    this.totalMora = this.ingresos.reduce((total, ingreso) => {
+      return total + (Number(ingreso.monto) || 0);
+    }, 0);
+  }
+
+  // Metodo para filtrar los ingresos por mora
   ingresosFiltrados(): IngresosMora[] {
     if (!this.filtroBusqueda.trim()) {
       return this.ingresos;
@@ -51,42 +59,55 @@ export class ReporteIngresosMoraComponent {
       ingreso.idusuario?.toString().toLowerCase().includes(filtro) ||
       ingreso.carnet?.toString().toLowerCase().includes(filtro) ||
       ingreso.nombreusuario?.toString().toLowerCase().includes(filtro) ||
-       ingreso.fecha_PAGO?.toString().toLowerCase().includes(filtro) ||
-        ingreso.monto?.toString().toLowerCase().includes(filtro) ||
-      // Agrega aquí otros campos que quieras incluir en la búsqueda
-      false
+      ingreso.fecha_PAGO?.toString().toLowerCase().includes(filtro) ||
+      ingreso.monto?.toString().toLowerCase().includes(filtro)
     );
   }
 
 
-  generarPDF(): void {
-  const doc = new jsPDF();
+ generarPDF(): void {
+    const doc = new jsPDF();
+    const datosFiltrados = this.ingresosFiltrados();
+    const totalFiltrado = datosFiltrados.reduce((total, ingreso) => total + (Number(ingreso.monto) || 0), 0);
 
-  // Título
-  doc.setFontSize(18);
-  doc.text('Reporte de Ingresos por Mora', 14, 15);
+    // Titulo
+    doc.setFontSize(18);
+    doc.text('Reporte de Ingresos por Mora', 14, 15);
+    
+    // fecha de generación
+    doc.setFontSize(10);
+    doc.text(`Generado el: ${new Date().toLocaleDateString()}`, 14, 22);
 
-  // Datos para la tabla
-  const columnas = ['ID', 'ID Usuario', 'Carnet', 'Nombre Usuario', 'Cantidad', 'Fecha de Pago'];
-  const filas = this.ingresosFiltrados().map(ingreso => [
-    ingreso.id_INGRESO !== undefined && ingreso.id_INGRESO !== null ? ingreso.id_INGRESO.toString() : '',
-    ingreso.idusuario !== undefined && ingreso.idusuario !== null ? ingreso.idusuario.toString() : '',
-    ingreso.carnet !== undefined && ingreso.carnet !== null ? ingreso.carnet.toString() : '',
-    ingreso.nombreusuario !== undefined && ingreso.nombreusuario !== null ? ingreso.nombreusuario.toString() : '',
-    ingreso.monto !== undefined && ingreso.monto !== null ? ingreso.monto.toString() : '',
-    ingreso.fecha_PAGO !== undefined && ingreso.fecha_PAGO !== null ? ingreso.fecha_PAGO.toString() : ''
-  ]);
+    // Datos para la tabla
+    const columnas = ['ID', 'ID Usuario', 'Carnet', 'Nombre Usuario', 'Cantidad', 'Fecha de Pago'];
+    const filas = datosFiltrados.map(ingreso => [
+      ingreso.id_INGRESO?.toString() || '',
+      ingreso.idusuario?.toString() || '',
+      ingreso.carnet?.toString() || '',
+      ingreso.nombreusuario?.toString() || '',
+      `$${ingreso.monto !== undefined && ingreso.monto !== null ? Number(ingreso.monto).toFixed(2) : '0.00'}`,
+      ingreso.fecha_PAGO?.toString() || ''
+    ]);
 
-  // Tabla
-  autoTable(doc, {
-    head: [columnas],
-    body: filas,
-    startY: 25,
-  });
+    // Tabla
+    autoTable(doc, {
+      head: [columnas],
+      body: filas,
+      startY: 30,
+      didDrawPage: (data) => {
+        
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`Total de ingresos por mora: $${totalFiltrado.toFixed(2)}`, 
+                 data.settings.margin.left, 
+                 doc.internal.pageSize.height - 10);
+      }
+    });
 
-  // Guardar el PDF
-  doc.save('reporte-ingresos-mora.pdf');
-}
+    // se guarda el PDF
+    doc.save('reporte-ingresos-mora.pdf');
+  }
 }
 
 

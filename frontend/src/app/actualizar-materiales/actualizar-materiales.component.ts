@@ -64,7 +64,7 @@ export class ActualizarMaterialesComponent {
     //this.guardarMaterial();
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "Confirma si deseas actualizar al idioma",
+      text: "Confirma si deseas actualizar el material",
       icon: 'warning', // Cambiado 'type' a 'icon'
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

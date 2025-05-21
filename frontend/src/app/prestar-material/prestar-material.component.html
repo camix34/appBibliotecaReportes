@@ -1,6 +1,6 @@
-<div class="table-responsive" >
+<div class="table-responsive">
     <h2>Lista Materiales para prestar</h2>
-    
+
     <h4>Buscar material</h4>
     <input type="text" class="form-control borde-negro" placeholder="Buscar material..." [(ngModel)]="filtroBusqueda">
 
@@ -33,24 +33,25 @@
 
 
                 <td>
-                    
-                        <button  *ngIf="!tieneMultaActiva()" class="btn btn-info" (click)="prestar(material.id_material)">PRESTAR</button>
-                    
-
+                    <button
+                        *ngIf="!tieneMultaActiva() && material.idCategoria.nombreCategoria.toLowerCase() !== 'mapas'"
+                        class="btn btn-info" (click)="prestar(material.id_material)">
+                        PRESTAR
+                    </button>
                 </td>
             </tr>
         </tbody>
 
     </table>
     <div *ngIf="tieneMultaActiva()">
-         <p >
-      ⚠️ <strong>Atención:</strong> Tienes multas pendientes, para prestar un material tienes que pagar la multa primero.
-    </p>
+        <p>
+            ⚠️ <strong>Atención:</strong> Tienes multas pendientes, para prestar un material tienes que pagar la multa
+            primero.
+        </p>
     </div>
-    
+
 
 
 
 
 </div>
-

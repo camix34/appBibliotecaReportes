@@ -13,16 +13,18 @@ export class IdiomaService {
   constructor(private httpClient: HttpClient) { }
 
 
-  // Método para obtener la lista de idiomas
+  // Metodo para obtener la lista de idiomas
   obtenerListaIdiomas(): Observable<Idioma[]> {
     return this.httpClient.get<Idioma[]>(`${this.baseURL}`);
   }
 
-  // Método para guardar un nuevo idioma
+  // Metodo para guardar un nuevo idioma
   registrarIdioma(idioma: Idioma): Observable<Object> {
     return this.httpClient.post(`${this.baseURL}`, idioma);
   }
 
+
+  //metodo para actualizar el idioma 
   actualizarIdioma(id: number ,idioma: Idioma): Observable<Object> {
     return this.httpClient.put(`${this.baseURL}/${id}`, idioma);
   }
