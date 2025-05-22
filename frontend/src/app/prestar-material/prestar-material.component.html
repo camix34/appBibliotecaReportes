@@ -1,0 +1,57 @@
+<div class="table-responsive">
+    <h2>Lista Materiales para prestar</h2>
+
+    <h4>Buscar material</h4>
+    <input type="text" class="form-control borde-negro" placeholder="Buscar material..." [(ngModel)]="filtroBusqueda">
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>id</th>
+                <th>Titulo</th>
+                <th>Autor</th>
+                <th>Año publi</th>
+                <th>Tipo Material</th>
+                <th>stock</th>
+                <th>imagen </th>
+                <th>Categoria</th>
+                <th>acciones</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let material of materialesFiltrados()">
+                <td>{{ material.id_material }}</td>
+                <td>{{ material.titulo }}</td>
+                <td>{{ material.autor }}</td>
+                <td>{{ material.aniopublicacion}}</td>
+                <td>{{ material.tipomaterial}}</td>
+                <td>{{ material.stockdisponible }}</td>
+                <td><img [src]="'http://localhost:8080' + material.imagen_portada" alt="Imagen" width="100"></td>
+
+                <td>{{ material.idCategoria?.nombreCategoria || 'Sin categoría' }}</td>
+
+
+                <td>
+                    <button
+                        *ngIf="!tieneMultaActiva() && material.idCategoria.nombreCategoria.toLowerCase() !== 'mapas'"
+                        class="btn btn-info" (click)="solicitarPrestamo(material.id_material)">
+                        SOLICITAR PRESTAMO
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+    <div *ngIf="tieneMultaActiva()">
+        <p>
+            ⚠️ <strong>Atención:</strong> Tienes multas pendientes, para prestar un material tienes que pagar la multa
+            primero.
+        </p>
+    </div>
+
+
+
+
+
+</div>

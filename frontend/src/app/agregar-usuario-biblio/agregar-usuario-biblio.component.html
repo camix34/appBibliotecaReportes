@@ -1,0 +1,152 @@
+<div class="p-4">
+  <form [formGroup]="formularioRegistro">
+    <div class="row g-3">
+      
+      <!-- Nombre -->
+      <div class="col-md-4">
+        <label class="form-label">Nombre</label>
+        <input type="text" class="form-control borde-negro" formControlName="nombre">
+        <div *ngIf="formularioRegistro.get('nombre')?.invalid && formularioRegistro.get('nombre')?.touched">
+          <small class="text-danger">El nombre es obligatorio</small>
+        </div>
+      </div>
+
+      <!-- Primer Apellido -->
+      <div class="col-md-4">
+        <label class="form-label">Primer Apellido</label>
+        <input type="text" class="form-control borde-negro" formControlName="apellido1">
+         <div *ngIf="formularioRegistro.get('apellido1')?.invalid && formularioRegistro.get('apellido1')?.touched">
+          <small class="text-danger">El primer apellido es obligatorio</small>
+        </div>
+      </div>
+
+      <!-- Segundo Apellido -->
+      <div class="col-md-4">
+        <label class="form-label">Segundo Apellido</label>
+        <input type="text" class="form-control borde-negro" formControlName="apellido2">
+        <div *ngIf="formularioRegistro.get('apellido2')?.invalid && formularioRegistro.get('apellido2')?.touched">
+          <small class="text-danger">El segundo apellido es obligatorio</small>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="col-md-4">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control borde-negro" formControlName="email">
+      </div>
+
+      <!-- Teléfono -->
+      <div class="col-md-4">
+        <label class="form-label">Número de Teléfono</label>
+        <input type="text" class="form-control borde-negro" formControlName="telefono">
+      </div>
+
+      <!-- Rol -->
+      <div class="col-md-4">
+        <label class="form-label">Profesión</label>
+        <select class="form-select borde-negro" formControlName="tipo">
+          <option value="" disabled selected>Seleccione ocupacion</option>
+          <option value="ESTUDIANTE">Estudiante</option>
+          <option value="DOCENTE">Profesor</option>
+          <option value="BIBLIOTECARIO">Bibliotecario</option>
+        </select>
+        <div *ngIf="formularioRegistro.get('tipo')?.touched && formularioRegistro.get('tipo')?.invalid">
+          <small class="text-danger">La ocupacion es requerida</small>
+        </div>
+      </div>
+
+      <!--Carrera-->
+      <div class="col-md-4" *ngIf="formularioRegistro.get('tipo')?.value === 'ESTUDIANTE'">
+            <label class="form-label">Carrera</label>
+            <select class="form-select" formControlName="carreraId">
+                <option *ngFor="let carrera of carreras" [value]="carrera.id">
+                    {{ carrera.nombre }}
+                </option>
+            </select>
+        <div *ngIf="formularioRegistro.get('carreraId')?.touched && formularioRegistro.get('carreraId')?.invalid">
+          <small class="text-danger">La carrera es requerida</small>
+        </div>
+     </div>
+     
+
+      <!--Facultad-->
+      <div class="col-md-4" *ngIf="formularioRegistro.get('tipo')?.value === 'ESTUDIANTE' || formularioRegistro.get('tipo')?.value === 'DOCENTE'">
+            <label class="form-label">Departamento: </label>
+            <select class="form-select" formControlName="facultadId">
+                <option *ngFor="let facultad of facultades" [value]="facultad.id">
+                    {{ facultad.nombre }}
+                </option>
+            </select>
+        <div *ngIf="formularioRegistro.get('facultadId')?.touched && formularioRegistro.get('facultadId')?.invalid">
+          <small class="text-danger">La facultad/departamento es requerida</small>
+        </div>
+     </div>
+
+      <!--Especialidad del docente-->
+      <div class="col-md-4" *ngIf="formularioRegistro.get('tipo')?.value === 'DOCENTE'">
+            <label class="form-label">Especialidad: </label>
+            <select class="form-select" formControlName="especialidad">
+                <option *ngFor="let especialidad of especialidades" [value]="especialidad.id_especialidad">
+                    {{ especialidad.nombre }}
+                </option>
+            </select>
+        <div *ngIf="formularioRegistro.get('especialidad')?.touched && formularioRegistro.get('especialidad')?.invalid">
+          <small class="text-danger">La especialidad es requerida</small>
+        </div>
+     </div>     
+
+      <!-- Tipo contrato -->
+       <div class="col-md-4" *ngIf="formularioRegistro.get('tipo')?.value === 'BIBLIOTECARIO' || formularioRegistro.get('tipo')?.value === 'DOCENTE'">
+            <label class="form-label">Tipo de contratación</label>
+            <select class="form-select" formControlName="contrato_id">
+                <option *ngFor="let contrato_ids of contrato_id"  [value]="contrato_ids.idContrato">
+                   {{ contrato_ids.tipo }}
+                </option>
+            </select>
+        <div *ngIf="formularioRegistro.get('contrato_id')?.touched && formularioRegistro.get('contrato_id')?.invalid">
+          <small class="text-danger">El tipo de contrato es requerido</small>
+        </div>
+     </div>
+        <!-- Area de trabajo -->
+      <div class="col-md-4" *ngIf="formularioRegistro.get('tipo')?.value === 'BIBLIOTECARIO'">
+        <label class="form-label">Area de trabajo:</label>
+        <input type="text" class="form-control borde-negro" formControlName="area">
+         <div *ngIf="formularioRegistro.get('area')?.touched && formularioRegistro.get('area')?.invalid">
+          <small class="text-danger">El area de trabjo es requerido</small>
+        </div>
+      </div>
+        <!-- DUI -->
+      <div class="col-md-4" *ngIf="formularioRegistro.get('tipo')?.value === 'BIBLIOTECARIO' || formularioRegistro.get('tipo')?.value === 'DOCENTE'">
+        <label class="form-label">DUI</label>
+        <input type="text" class="form-control borde-negro" formControlName="dui">
+         <div *ngIf="formularioRegistro.get('dui')?.touched && formularioRegistro.get('dui')?.invalid">
+              <small class="text-danger" *ngIf="formularioRegistro.get('dui')?.errors?.['required']">
+                El DUI es obligatorio
+              </small>
+             
+          </div>
+      </div>
+
+      <!--Direccion-->
+      <div class="col-md-4" >
+        <label class="form-label">Direccion</label>
+        <input type="text" class="form-control borde-negro" formControlName="direccion">
+      </div>
+
+      <!-- Mensaje -->
+      <div class="col-12">
+        <label class="form-label text-muted">
+          Una vez que presione el botón "Agregar usuario", se guardará y pasará al siguiente formulario.
+        </label>
+      </div>
+
+      <!-- Botón -->
+      <div class="col-12">
+        <button (click)="enviarFormulario()" type="button" class="btn btn-success">
+          <i class="fa-solid fa-user-plus"></i> Agregar usuario
+        </button>
+      </div>
+
+    </div>
+  </form>
+</div>

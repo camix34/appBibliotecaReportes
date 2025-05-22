@@ -1,0 +1,31 @@
+CREATE OR REPLACE TRIGGER TRG_DELETE_MULTA_HISTORIAL
+AFTER DELETE ON MULTA
+FOR EACH ROW
+DECLARE
+    v_idusuario NUMBER;
+    v_nombreusuario VARCHAR2(255);
+    v_carnet VARCHAR2(80);
+BEGIN
+    -- Obtener datos del usuario asociado al préstamo
+    SELECT u.IDUSUARIO, u.NOMBRE || ' ' || u.APELLIDO1, u.CARNET
+    INTO v_idusuario, v_nombreusuario, v_carnet
+    FROM PRESTAMO p
+    JOIN USUARIO u ON p.ID_USUARIO = u.IDUSUARIO
+    WHERE p.ID_PRESTAMO = :OLD.IDPRESTAMO;
+
+    -- Insertar en historial con la fecha actual como fecha de pago
+    INSERT INTO HISTORIAL_INGRESOS_MORA (
+        IDUSUARIO,
+        NOMBREUSUARIO,
+        CARNET,
+        MONTO,
+        FECHA_PAGO
+    ) VALUES (
+        v_idusuario,
+        v_nombreusuario,
+        v_carnet,
+        :OLD.MONTO,
+        TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
+    );
+END;
+/

@@ -1,0 +1,148 @@
+<div class="col-md-6 offset-md-3">
+    <h3 class="text-center">Actualizar Materiales</h3>
+    <form action="" (ngSubmit)="onSubmit()" #materialForm="ngForm">
+        <div class="from-group">
+            <label>titulo material</label>
+            <input type="text" class="form-control borde-negro" id="titulo" [(ngModel)]="material.titulo" required
+                name="titulo" placeholder="Digite el titulo" minlength="4" maxlength="20" #nombre="ngModel" />
+            <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                <div *ngIf="nombre.errors?.['required']">
+                    digite un titulo
+                </div>
+                <div *ngIf="nombre.errors?.['minlength']">
+                    el titulo del material debe tener al menos 4 caracteres
+                </div>
+                <div *ngIf="nombre.errors?.['maxlength']">
+                    EL titulo del material no puede tener más de 20 caracteres
+             </div>
+
+        </div>
+        <div class="from-group">
+            <label>Autor</label>
+            <input type="text" class="form-control borde-negro" id="autor" [(ngModel)]="material.autor" required
+                name="autor" placeholder="Digite el autor" #apellido="ngModel" maxlength="20" minlength="2" />
+
+            <div class="alert alert-danger" *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
+                <div *ngIf="apellido.errors?.['required']">
+                    digite un codigoISO por favor
+                </div>
+                <div *ngIf="apellido.errors?.['minlength']">
+                    El codigoISO debe tener al menos 4 caracteres
+                </div>
+                <div *ngIf="apellido.errors?.['maxlength']">
+                    EL codigoISO no puede tener más de 20 caracteres
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="from-group">
+            <label>Año publicación</label>
+            <input type="number" class="form-control borde-negro" id="aniopublicacion"
+                [(ngModel)]="material.aniopublicacion" required name="aniopublicacion" placeholder="Digite el año de publicacion"
+                #anio="ngModel" maxlength="4" minlength="4" />
+
+            <div class="alert alert-danger" *ngIf="anio.invalid && (anio.dirty || anio.touched)">
+                <div *ngIf="anio.errors?.['required']">
+                    digite un año por favor
+                </div>
+                <div *ngIf="anio.errors?.['minlength']">
+                    El año debe tener al menos 4 caracteres
+                </div>
+                <div *ngIf="anio.errors?.['maxlength']">
+                    EL año no puede tener más de 4 caracteres
+                </div>
+
+            </div>
+
+        </div>
+        <div class="from-group">
+            <label>Tipo de material</label>
+            <input type="text" class="form-control borde-negro" id="tipomaterial" [(ngModel)]="material.tipomaterial"
+                required name="tipomaterial" placeholder="Digite el tipo de material" #tipo="ngModel" maxlength="20"
+                minlength="4" />
+
+            <div class="alert alert-danger" *ngIf="tipo.invalid && (tipo.dirty || tipo.touched)">
+                <div *ngIf="tipo.errors?.['required']">
+                    digite un año por favor
+                </div>
+                <div *ngIf="tipo.errors?.['minlength']">
+                    El tipo de material debe tener al menos 4 caracteres
+                </div>
+                <div *ngIf="tipo.errors?.['maxlength']">
+                    EL tipo de material no puede tener más de 4 caracteres
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="from-group">
+            <label>Stock disponible</label>
+            <input type="number" class="form-control borde-negro" id="stockdisponible"
+                [(ngModel)]="material.stockdisponible" required name="stockdisponible" placeholder="Stock"
+                #stock="ngModel" />
+
+            <div class="alert alert-danger" *ngIf="stock.invalid && (stock.dirty || stock.touched)">
+                <div *ngIf="stock.errors?.['required']">
+                    digite un digito por favor
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="from-group">
+            <label>Imagen portada</label>
+            <input (change)="capturarfile($event)" type="file" accept="image/*" class="form-control borde-negro"
+                id="imagen_portada" [(ngModel)]="material.imagen_portada" required name="imagen_portada"
+                #imagen="ngModel" />
+
+            <div class="alert alert-danger" *ngIf="imagen.invalid && (imagen.dirty || imagen.touched)">
+                <div *ngIf="imagen.errors?.['required']">
+                    seleccione una imagen
+                </div>
+            </div>
+
+        </div>
+        <div>
+            <img [src]="urlImagen" alt="Vista previa" width="200">
+
+        </div>
+
+        <div class="from-group">
+            <label>Categorias</label>
+
+            <select [(ngModel)]="material.idCategoria" name="idCategoria" id="idCategoria" class="form-select" required >
+
+                <option *ngFor="let cat of categorias" [value]="cat.id" required >
+                    {{ cat.nombreCategoria }}
+                </option>
+            </select>
+         </div>
+
+      
+        </div>
+        <div class="form-group">
+             <label>Idiomas</label>
+
+            <select [(ngModel)]="material.idIdioma" name="idIdioma" id="idIdioma" class="form-select" required >
+
+                <option *ngFor="let cat of idiomas" [value]="cat.id" required >
+                    {{ cat.nombreIdioma }}
+                </option>
+            </select>
+        </div>
+
+        
+        
+
+
+
+        <button class="btn btn-success" [disabled]="!materialForm.form.valid">Guardar</button>
+    </form>
+
+     <button (click)="volveraMateriales()" class="btn btn-info">volver</button>
+</div>

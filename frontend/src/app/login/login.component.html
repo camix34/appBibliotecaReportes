@@ -1,0 +1,56 @@
+
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-pic" data-tilt>
+					<img src="assets/images/img-01.png" alt="IMG">
+					
+				</div>
+				
+				<form class="login100-form validate-form">
+					<span class="login100-form-title">
+						INICIAR SESIÓN
+					</span>
+
+					<div class="wrap-input100 validate-input" required
+					>
+					
+						<input class="input100" type="text" [(ngModel)]="username" name="username" placeholder="Usuario">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
+						
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate = "contraseña es requerida">
+						<input class="input100" type="password" [(ngModel)]="password" name="pass" placeholder="Password">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+					</div>
+					
+					<div class="container-login100-form-btn">
+						<button value="login" (click)="doLogin()" class="login100-form-btn">
+							INICIAR SESIÓN
+						</button>
+					</div>
+					<p *ngIf="message" style="color: red;">
+						{{ message }}
+					  </p>
+					  
+
+					<div class="text-center p-t-12">
+						
+						
+					</div>
+
+					
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	
+

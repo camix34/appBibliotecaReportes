@@ -1,0 +1,18 @@
+create or replace TRIGGER tr_historial_prestamo
+AFTER DELETE ON prestamo
+FOR EACH ROW
+BEGIN
+  INSERT INTO historial_prestamo (
+    id_prestamo, 
+    id_usuario, 
+    id_material, 
+    fecha_prestamo, 
+    fecha_devolucion
+  ) VALUES (
+    :OLD.id_prestamo,
+    :OLD.id_usuario,
+    :OLD.id_material, 
+    :OLD.fecha_prestamo,
+    :OLD.fecha_devolucion
+  );
+END;

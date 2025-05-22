@@ -1,0 +1,60 @@
+<table class="table table-striped table-bordered">
+  <thead class="table-dark">
+    <tr>
+      <th>Carnet</th>
+      <th>ID USUARIO</th>
+      <th>Nombre</th>
+      <th>Multa</th>
+      <th>Días de Retraso</th>
+      <th>Material</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of usuariosMoraResumen">
+      <td>{{ item.carnet }}</td>
+      <td>{{ item.idusuario }}</td>
+      <td>{{ item.nombreCompleto }}</td>
+      <td>$ {{ item.montoTotal }} </td>
+      <td>{{ item.diasTotalesRetraso }}</td>
+      <td>{{ item.nombreMaterial }}</td>
+      <td>
+        <button class="btn btn-info" (click)="abrirModalQuitarPenalizacion(item)">
+          Quitar Penalización
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- MODAL -->
+<div class="modal-backdrop fade show" *ngIf="mostrarModal"></div>
+<div class="modal fade show d-block" tabindex="-1" *ngIf="mostrarModal" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar Pago de Multa</h5>
+        <button type="button" class="close" (click)="cancelarModal()" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p>¿Desea generar la factura y registrar el pago para el siguiente usuario?</p>
+        <ul *ngIf="usuarioSeleccionado">
+          <li><strong>Nombre:</strong> {{ usuarioSeleccionado.nombre }}</li>
+          <li><strong>Carnet:</strong> {{ usuarioSeleccionado.carnet }}</li>
+          <li><strong>ID Usuario:</strong> {{ usuarioSeleccionado.idusuario }}</li>
+          <li><strong>Monto Total:</strong>$ {{ usuarioSeleccionado.montoTotal }} </li>
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelarModal()">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="generarFactura()">Generar Factura</button>
+      </div>
+
+    </div>
+  </div>
+</div>

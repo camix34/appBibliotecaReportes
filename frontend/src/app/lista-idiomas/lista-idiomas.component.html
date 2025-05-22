@@ -1,0 +1,27 @@
+<h2>Lista de Idiomas</h2>
+<button class="btn btn-info" (click)="agregarIdioma()">Agregar Idioma</button>
+<table class="table table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>id</th>
+      <th>Idioma nombre</th>
+      <th>CodigoISO</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let idioma of idiomas">
+      <td>{{ idioma.id }}</td>
+      <td>{{ idioma.nombreIdioma }}</td>
+      <td>{{ idioma.codigoISO }}</td>
+      <td>
+         <button (click)="verDetallerIdioma(idioma.id)" class="btn btn-success"><i class="fa-solid fa-eye"></i>
+          ver</button>
+        <button (click)="actualizarIdioma(idioma.id)" class="btn btn-info">actualizar</button>
+        <button (click)="eliminarIdioma(idioma.id)" class="btn btn-danger">Eliminar</button>
+       
+      </td>
+    </tr>
+  </tbody>
+
+</table>

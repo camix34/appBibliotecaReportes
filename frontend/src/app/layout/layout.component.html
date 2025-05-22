@@ -1,0 +1,264 @@
+<div class="wrapper">
+  <nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+      <a class="sidebar-brand" href="index.html">
+        <span class="align-middle">SISTEMA BIBLIOTECARIO</span>
+      </a>
+
+      <ul class="sidebar-nav">
+
+        <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ADMIN'" routerLink="/home" routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="sliders"></i>
+            <span class="align-middle">DASHBOARD</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ADMIN' || user.roles[0].roleEnum == 'BIBLIOTECARIO'" routerLink="/add_user_biblio"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="user"></i>
+            <span class="align-middle">AGREGAR USUARIOS</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ADMIN' || user.roles[0].roleEnum == 'BIBLIOTECARIO'" routerLink="/list_users"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="user"></i>
+            <span class="align-middle">VER USUARIOS</span>
+          </a>
+        </li>
+           <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ADMIN' || user.roles[0].roleEnum == 'BIBLIOTECARIO'" routerLink="/aprobar_solicitudes"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="user"></i>
+            <span class="align-middle">APROBAR SOLICITUDES</span>
+          </a>
+        </li>
+        <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ADMIN' || user.roles[0].roleEnum == 'BIBLIOTECARIO'" routerLink="/list_idiomas"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="user"></i>
+            <span class="align-middle">VER IDIOMAS</span>
+          </a>
+        </li>
+
+          <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ADMIN' || user.roles[0].roleEnum == 'BIBLIOTECARIO'" routerLink="/list_categorias"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="sliders"></i>
+            <span class="align-middle">VER CATEGORIAS</span>
+          </a>
+        </li>
+        <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ADMIN' || user.roles[0].roleEnum == 'BIBLIOTECARIO'" routerLink="/list_materiales"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="user"></i>
+            <span class="align-middle">VER MATERIALES</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ESTUDIANTE' || !estaPenalizado()" routerLink="/dashboard_user"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="user"></i>
+            <span class="align-middle">MIS ACTIVIDADES</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item" *ngIf="!estaPenalizado() && user.roles[0].roleEnum == 'ESTUDIANTE' ||user.roles[0].roleEnum == 'ADMIN' || user.roles[0].roleEnum == 'BIBLIOTECARIO' || !estaPenalizado()" routerLink="/list_materiales_prestar"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="sliders"></i>
+            <span class="align-middle">PRESTAR MATERIAL</span>
+          </a>
+        <li class="sidebar-item" *ngIf="!estaPenalizado() && user.roles[0].roleEnum == 'ESTUDIANTE' || user.roles[0].roleEnum == 'BIBLIOTECARIO'" routerLink="/devolver_prestamo"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="sliders"></i>
+            <span class="align-middle">Devolver MATERIAL</span>
+          </a>
+        </li>
+    
+        <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ESTUDIANTE' " routerLink="/mis_prestamos"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="user"></i>
+            <span class="align-middle">Mi historial de prestamos</span>
+          </a>
+        </li>
+
+         <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ADMIN' || user.roles[0].roleEnum == 'BIBLIOTECARIO'" routerLink="/usuarios_mora"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="user"></i>
+            <span class="align-middle">VER USUARIOS MORA</span>
+          </a>
+        </li>
+
+         <li
+                class="sidebar-item d-flex align-items-center justify-content-between"
+                *ngIf="!estaPenalizado() && (user.roles[0].roleEnum === 'ESTUDIANTE' || user.roles[0].roleEnum === 'BIBLIOTECARIO')"
+                routerLink="/notificacion_user"
+                routerLinkActive="active"
+              >
+                <a class="sidebar-link d-flex align-items-center">
+                  <i class="align-middle me-2" data-feather="sliders"></i>
+                  <span class="align-middle">MIS NOTIFICACIONES</span>
+                </a>
+
+                <span *ngIf="unreadCount > 0" class="badge bg-danger ms-2">
+                  {{ unreadCount }}
+                </span>
+        </li>
+
+        <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ADMIN' || user.roles[0].roleEnum == 'BIBLIOTECARIO'" routerLink="/Ingresos_por_mora"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="user"></i>
+            <span class="align-middle">REPORTE INGRESOS POR MORA</span>
+          </a>
+        </li>
+           <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ADMIN' || user.roles[0].roleEnum == 'BIBLIOTECARIO'" routerLink="/historial_prestamos_activos"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="user"></i>
+            <span class="align-middle">REPORTE DE PRESRAMOS ACTIVOS</span>
+          </a>
+        </li>
+        <li class="sidebar-item" *ngIf="user.roles[0].roleEnum == 'ADMIN' || user.roles[0].roleEnum == 'BIBLIOTECARIO'" routerLink="/historial_prestamos_devueltos"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="user"></i>
+            <span class="align-middle">REPORTE DE PRESRAMOS DEVUELTOS</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item" *ngIf=" user.roles[0].roleEnum == 'BIBLIOTECARIO' || user.roles[0].roleEnum == 'ADMIN'" routerLink="/renovar_carnet"
+          routerLinkActive="active">
+          <a class="sidebar-link">
+            <i class="align-middle" data-feather="sliders"></i>
+            <span class="align-middle">RENOVAR CARNET</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="main">
+    <nav class="navbar navbar-expand navbar-light navbar-bg">
+      <a class="sidebar-toggle js-sidebar-toggle">
+        <i class="fa-solid fa-list-ul fa-2x"></i>
+      </a>
+
+      <div class="navbar-collapse collapse">
+        <ul class="navbar-nav navbar-align">
+
+          <!-- Notificaciones -->
+          <li class="nav-item dropdown">
+            <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+              <div class="position-relative">
+                <i class="align-middle" data-feather="bell"></i>
+                <span class="indicator">4</span>
+              </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+              <div class="dropdown-menu-header">4 New Notifications</div>
+              <div class="list-group">
+                <!-- Notificaciones individuales -->
+                <a href="#" class="list-group-item">
+                  <div class="row g-0 align-items-center">
+                    <div class="col-2"><i class="text-danger" data-feather="alert-circle"></i></div>
+                    <div class="col-10">
+                      <div class="text-dark">Update completed</div>
+                      <div class="text-muted small mt-1">Restart server 12 to complete the update.</div>
+                      <div class="text-muted small mt-1">30m ago</div>
+                    </div>
+                  </div>
+                </a>
+                <!-- Puedes añadir más aquí -->
+              </div>
+              <div class="dropdown-menu-footer">
+                <a href="#" class="text-muted">Show all notifications</a>
+              </div>
+            </div>
+          </li>
+
+          <!-- Mensajes -->
+          <li class="nav-item dropdown">
+            <a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
+              <div class="position-relative">
+                <i class="align-middle" data-feather="message-square"></i>
+              </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
+              <div class="dropdown-menu-header">4 New Messages</div>
+              <div class="list-group">
+                <!-- Mensajes individuales -->
+                <a href="#" class="list-group-item">
+                  <div class="row g-0 align-items-center">
+                    <div class="col-2">
+                      <img src="img/avatars/avatar-5.jpg" class="avatar img-fluid rounded-circle" alt="Vanessa Tucker">
+                    </div>
+                    <div class="col-10 ps-2">
+                      <div class="text-dark">Vanessa Tucker</div>
+                      <div class="text-muted small mt-1">Nam pretium turpis et arcu. Duis arcu tortor.</div>
+                      <div class="text-muted small mt-1">15m ago</div>
+                    </div>
+                  </div>
+                </a>
+                <!-- Puedes añadir más aquí -->
+              </div>
+              <div class="dropdown-menu-footer">
+                <a href="#" class="text-muted">Show all messages</a>
+              </div>
+            </div>
+          </li>
+
+          <!-- Perfil de usuario -->
+          <li class="nav-item dropdown">
+            <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+              <i class="align-middle" data-feather="settings"></i>
+            </a>
+
+            <div class="dropdown">
+              <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ perfilCompleto.tipo ?? 'Administrador' }}
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" routerLink="/see_profile" routerLinkActive="active">Perfil</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" (click)="logout()">Cerrar sesión</a>
+                </li>
+              </ul>
+            </div>
+
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="content">
+      <div class="container-fluid p-0">
+        <h1 class="h3 mb-3">{{ currentRouteName }}</h1>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">
+                  <router-outlet></router-outlet>
+                </h5>
+              </div>
+              <div class="card-body"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>

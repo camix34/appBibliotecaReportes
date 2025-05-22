@@ -1,0 +1,33 @@
+<div class="container mt-4">
+  <h2>ACTUALIZAR IDIOMA</h2>
+
+  <form (ngSubmit)="onSubmit()" #formCategoria="ngForm">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">NUEVO NOMBRE DEL IDIOMA</label>
+      <input
+        type="text"
+        id="nombre"
+        class="form-control"
+        [(ngModel)]="idiomas.nombreIdioma"
+        name="nombreCategoria"
+        required
+      />
+    </div>
+      <div class="mb-3">
+      <label for="descripcion" class="form-label">NUEVO CODIGOISO</label>
+      <input
+        type="text"
+        id="descripcion"
+        class="form-control"
+        [(ngModel)]="idiomas.codigoISO"
+        name="descripcion"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-success">Actualizar</button>
+    <button type="button" class="btn btn-info ms-2" (click)="irALaListaCategorias()">volver</button>
+  </form>
+</div>
+
+

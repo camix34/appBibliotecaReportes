@@ -1,0 +1,17 @@
+trigger para membresia
+CREATE OR REPLACE TRIGGER insertar_membresia
+AFTER INSERT ON usuario
+FOR EACH ROW
+BEGIN
+  -- Solo insertar si el tipo es ESTUDIANTE o DOCENTE
+  IF :NEW.tipo IN ('ESTUDIANTE', 'DOCENTE') THEN
+    -- Insertar en la tabla membresia
+    INSERT INTO membresia (fechainicio, fechafin, estado, idusuario)
+    VALUES (
+      SYSDATE, -- La fecha y hora actual (fecha de inicio)
+      ADD_MONTHS(SYSDATE, 12), -- Fecha fin, 12 meses después (1 año)
+      1, -- Estado inicial activo
+      :NEW.idusuario -- El idusuario del nuevo registro insertado
+    );
+  END IF;
+END insertar_membresia;

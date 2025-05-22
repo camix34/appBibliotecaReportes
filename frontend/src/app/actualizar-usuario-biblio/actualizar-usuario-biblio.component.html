@@ -1,0 +1,84 @@
+<div class="p-4">
+
+    <form [formGroup]="formularioUpdate" (ngSubmit)="onSubmit()">
+        <div class="row g-3">
+            <!-- Nombre -->
+            <div class="col-md-4">
+                <label formControlName="nombre" class="form-label">Nombre</label>
+                <input type="text" formControlName="nombre" class="form-control borde-negro" >
+            </div>
+            <!-- Primer Apellido -->
+            <div class="col-md-4">
+                <label class="form-label">Primer Apellido</label>
+                <input type="text" formControlName="apellido1" class="form-control borde-negro" [value]="apellido1">
+            </div>
+             <!-- Segundo Apellido -->
+            <div class="col-md-4">
+                <label class="form-label">Segundo Apellido</label>
+                <input type="text" formControlName="apellido2" class="form-control borde-negro" [value]="apellido2">
+            </div>
+            <!-- Email -->
+            <div class="col-md-4">
+                <label class="form-label">Email</label>
+                <input type="email" formControlName="email" class="form-control borde-negro" [value]="email">
+                
+
+              
+            </div>
+            <!-- Teléfono -->
+            <div class="col-md-4">
+                <label class="form-label">Número de Teléfono</label>
+                <input formControlName="telefono" type="text" class="form-control borde-negro" >
+            </div>
+        
+            <!--Carrera-->
+            <div class="col-md-4" *ngIf="tipo === 'ESTUDIANTE'">
+                    <label class="form-label">Carrera</label>
+                    <select class="form-select" formControlName="idCarrera">
+                        <option *ngFor="let carrera of carreras" [value]="carrera.id">
+                            {{ carrera.nombre }}
+                        </option>
+                    </select>
+            </div>
+            <!--Facultad-->
+            <div class="col-md-4" *ngIf="tipo === 'ESTUDIANTE' || tipo === 'DOCENTE'">
+                    <label class="form-label">Departamento/Facultad:</label>
+                    <select class="form-select" formControlName="idFacultad">
+                        <option *ngFor="let facultad of facultades" [value]="facultad.id">
+                            {{ facultad.nombre }}
+                        </option>
+                    </select>
+            </div>
+             <!-- AREA -->
+            <div class="col-md-4"  *ngIf="tipo === 'BIBLIOTECARIO'">
+                <label class="form-label">Area de trabajo:</label>
+                <input formControlName="area" type="text" class="form-control borde-negro" >
+            </div>
+                 <!--Especialidad del docente-->
+      <div class="col-md-4" *ngIf="tipo === 'DOCENTE'">
+            <label class="form-label">Especialidad: </label>
+            <select class="form-select" formControlName="especialidad_id">
+                <option *ngFor="let especialidad of especialidades" [value]="especialidad.id_especialidad">
+                    {{ especialidad.nombre }}
+                </option>
+            </select>
+     </div>     
+             <!-- dui -->
+            <div class="col-md-4"  *ngIf="tipo === 'BIBLIOTECARIO' || tipo=== 'DOCENTE'">
+                <label class="form-label">Dui:</label>
+                <input formControlName="dui" type="text" class="form-control borde-negro" >
+            </div>
+             <!-- Dirección -->
+            <div class="col-md-6">
+                <label class="form-label">Dirección</label>
+                <input type="text" class="form-control borde-negro" formControlName="direccion">
+            </div>
+            <div class="mt-2">
+                  <button (click)="onSubmit()" type="submit" class="btn btn-info me-2">
+                     <i class="fa-solid fa-user-plus"></i>Guardar Cambios</button>
+                  <button (click)="irAlaListaUsuarios()" type="submit" class="btn btn-danger">Volver</button>
+            </div>
+        </div>
+
+    </form>
+</div>

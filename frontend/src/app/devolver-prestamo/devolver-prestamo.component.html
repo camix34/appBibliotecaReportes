@@ -1,0 +1,187 @@
+<h2>Mis préstamos</h2>
+
+<table class="table table-striped table-bordered">
+  <thead class="table-dark">
+    <tr>
+      <th>ID Préstamo</th>
+      <th>Material Titulo</th>
+      <th>Fecha Prestamo</th>
+      <th>Fecha Devolución</th>
+      
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of prestamosconMulta">
+      <td>{{ p.idPrestamo }}</td>
+      <td>{{ p.tituloMaterial || 'Sin título' }}</td>
+      <td>{{ p.fechaPrestamo | date }}</td>
+     
+      <td style="max-width: 200px;">
+        {{ p.fechaDevolucion | date }}
+        <span *ngIf="p.tieneMulta" class="badge bg-danger ms-1">Multa Aplicada</span>
+        <span *ngIf="p.tieneMulta && p.dias_retraso > 0" class="badge bg-warning ms-1">
+          {{ p.dias_retraso }} días retraso
+        </span>
+      </td>
+     
+      <td>
+        
+          <button class="btn btn-info" *ngIf="!p.tieneMulta" (click)="devolverPrestamo(p.idPrestamo)">Devolver</button>
+                  <button class="btn btn-primary ms-2" *ngIf="!p.tieneMulta" (click)="renovarPrestamo(p.idPrestamo)" [disabled]="!puedeRenovar()"
+          title="{{ puedeRenovar() ? 'Renovar préstamo' : 'Solo disponible para no estudiantes' }}">
+          Renovar
+        </button>
+         
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div>
+<div  *ngIf="tieneMultasActivas && !estaPenalizado" >
+  <div class="alerta-multa">
+    <p>
+      ⚠️ <strong>Atención:</strong> Tienes multas pendientes para devolver el material tienes que pagar la multa primero.
+    </p>
+     <div *ngIf="montoTotalMultas > 0" class="total-multas small-text">
+          <p>💰 Total acumulado de multas: ${{ montoTotalMultas | number:'1.2-2' }}</p>
+       </div>
+    
+    
+</div>
+
+<button type="button" class="btn btn-info"  routerLink="/pagar_multa"
+          routerLinkActive="active">Pagar Multa</button>
+
+
+    
+  
+    
+</div>
+
+<div  *ngIf="estaPenalizado" >
+  <div >
+    <p>
+      ⚠️ <strong>Atención:</strong> Estimado usuario tu cuenta ha sido desactivada por tener un retraso de {{ prestamosconMulta[0].dias_retraso }} días
+      por favor comunicarse con la biblioteca.
+    </p>
+     <div *ngIf="montoTotalMultas > 0" class="total-multas small-text">
+          <p>💰 Total acumulado de multas: ${{ montoTotalMultas | number:'1.2-2' }}</p>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div *ngIf="" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">DETALLES DE LA MULTA</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <div *ngIf="montoTotalMultas > 0" class="total-multas small-text">
+          💰 Total acumulado de multas: ${{ montoTotalMultas | number:'1.2-2' }}
+       </div>
+      </div>
+
+      <!-- Lista de multas individuales -->
+      <div *ngFor="let prestamo of prestamosconMulta">
+        <p *ngIf="prestamo.monto>0">
+          📚 <strong>{{ prestamo.tituloMaterial }}</strong> —
+          Multa: ${{ prestamo.monto | number:'1.2-2' }}
+         
+        </p>
+      </div>
+
+        <div *ngIf="multaSeleccionada">
+            <p><strong>Libro:</strong> {{ multaSeleccionada.tituloMaterial }}</p>
+            <p><strong>Fecha préstamo:</strong> {{ multaSeleccionada.fechaPrestamo | date:'dd/MM/yyyy' }}</p>
+            <p><strong>Fecha devolución esperada:</strong> {{ multaSeleccionada.fechaDevolucion | date:'dd/MM/yyyy' }}</p>
+            <p><strong>Fecha devolución real:</strong> {{ multaSeleccionada.fechaDevolucionReal | date:'dd/MM/yyyy' }}</p>
+            <p><strong>Monto de la multa:</strong> ${{ multaSeleccionada.monto | number:'1.2-2' }}</p>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar pago</button>
+       <button
+              type="button"
+              data-bs-dismiss="modal"
+              class="btn btn-success"
+             routerLink="/pagar_multa"
+          routerLinkActive="active">
+              Pagar multas
+      </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de pago -->
+<div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalPagoLabel">Simulación de pago</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p>💳 Selecciona el método de pago:</p>
+        <div class="d-grid gap-2">
+          <button class="btn btn-outline-primary">Tarjeta de crédito</button>
+          <button class="btn btn-outline-success">Tarjeta de débito</button>
+          <button class="btn btn-outline-secondary">Pago en efectivo</button>
+        </div>
+        <hr>
+        <p>Total a pagar: <strong>${{ montoTotalMultas | number:'1.2-2' }}</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-success">Confirmar pago</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de formulario de tarjeta -->
+<div class="modal fade" id="modalFormularioPago" tabindex="-1" aria-labelledby="modalFormularioPagoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalFormularioPagoLabel">Formulario de tarjeta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label class="form-label">Número de tarjeta</label>
+            <input type="text" class="form-control" [(ngModel)]="numeroTarjeta" name="numeroTarjeta" (input)="detectarTipoTarjeta()" maxlength="19">
+            <small class="text-muted">Tipo detectado: <strong>{{ tipoTarjeta }}</strong></small>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Nombre en la tarjeta</label>
+            <input type="text" class="form-control" required>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Fecha de vencimiento</label>
+              <input type="text" class="form-control" placeholder="MM/AA" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">CVV</label>
+              <input type="text" class="form-control" maxlength="4" required>
+            </div>
+          </div>
+
+          <div class="text-end">
+            <button type="submit" class="btn btn-success">Pagar ahora</button>
+          </div>
+           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar pago</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  

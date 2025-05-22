@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <h2>Actualizar Categoría</h2>
+
+  <form (ngSubmit)="onSubmit()" #formCategoria="ngForm">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre de la Categoría</label>
+      <input
+        type="text"
+        id="nombre"
+        class="form-control"
+        [(ngModel)]="categoria.nombreCategoria"
+        name="nombreCategoria"
+        required
+      />
+    </div>
+      <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripción de la Categoría</label>
+      <input
+        type="text"
+        id="descripcion"
+        class="form-control"
+        [(ngModel)]="categoria.descripcion"
+        name="descripcion"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-success">Actualizar</button>
+    <button type="button" class="btn btn-info ms-2" (click)="irALaListaCategorias()">volver</button>
+  </form>
+</div>
+

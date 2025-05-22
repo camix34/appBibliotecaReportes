@@ -1,0 +1,17 @@
+<!-- components/crear-rol/crear-rol.component.html -->
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <label>Nombre del Rol (ENUM):</label>
+  <input type="text" formControlName="roleEnum" />
+
+  <div *ngFor="let permiso of permisos">
+    <input
+    style="color: black;"
+      type="checkbox"
+      [value]="permiso.id"
+      (change)="onCheckboxChange($event)"
+    />
+    {{ permiso.name }}
+  </div>
+
+  <button type="submit">Crear Rol</button>
+</form>

@@ -1,0 +1,60 @@
+<div class="p-4">
+  <form [formGroup]="userForm">
+    <div class="row g-3">
+  
+      <!-- Nombre de usuario -->
+      <div class="col-md-4">
+        <label class="form-label">Nombre de usuario</label>
+        <input type="text"  formControlName="username" class="form-control borde-negro" [value]="carnet" readonly>
+       
+      </div>
+  
+      <!-- Contraseña -->
+      <div class="col-md-4">
+        <label class="form-label">Contraseña</label>
+        <div class="input-group">
+          <input 
+            [type]="showPassword ? 'text' : 'password'"
+            class="form-control borde-negro"
+            formControlName="password"
+          />
+         
+        </div>
+        <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="togglePassword()"
+        tabindex="-1"
+      >
+        <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+      </button>
+        <div *ngIf="userForm.get('password')?.touched && userForm.get('password')?.invalid">
+          <small class="text-danger">La contraseña es requerida (mínimo 6 caracteres)</small>
+        </div>
+      </div>
+  
+      <!-- Rol -->
+      <div class="col-md-4">
+        <label class="form-label">Rol</label>
+        <select class="form-select borde-negro" formControlName="role">
+          <option value="" disabled selected>Seleccione rol</option>
+          <option *ngFor="let role of roles" [value]="role.id">{{ role.roleEnum }}</option>
+        </select>
+        <div *ngIf="userForm.get('role')?.touched && userForm.get('role')?.invalid">
+          <small class="text-danger">El rol es requerido</small>
+        </div>
+      </div>
+  
+    </div>
+  
+    <!-- Botón Registrar -->
+    <div class="mt-4">
+      <button (click)="guardarUsuario()" type="button" class="btn btn-success">
+        <i class="fa-solid fa-user-plus"></i> Registrar Usuario
+      </button>
+    </div>
+  </form>
+  
+  
+</div>
+  
