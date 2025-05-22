@@ -72,4 +72,7 @@ public class PrestamoEntity {
 @Enumerated(EnumType.STRING)
 private EstadoPrestamo estado = EstadoPrestamo.PENDIENTE;
 
+
+@Column(name ="estado_renovacion")
+private String estadoRenovacion;
 }

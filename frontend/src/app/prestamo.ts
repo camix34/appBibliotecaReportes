@@ -9,5 +9,5 @@ export class Prestamo {
     FECHA_DEVOLUCION_REAL:Date;
 
      usuario: UsuarioBiblio;
-
+   
 }

@@ -126,6 +126,8 @@ public class SecurityConfig {
 
                     http.requestMatchers(HttpMethod.POST, "/api/materiales/confirmar-solicitud/{solicitudId}").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/api/materiales/{materialId}/solicitar/{usuarioId}").permitAll();
+                    http.requestMatchers(HttpMethod.PUT, "/api/prestamos/{idprestamo}/aprobar-renovacion").permitAll();
+                    http.requestMatchers(HttpMethod.GET, "/api/prestamos/renovaciones/pendientes").permitAll();
 
                     http.anyRequest().denyAll();
                 })

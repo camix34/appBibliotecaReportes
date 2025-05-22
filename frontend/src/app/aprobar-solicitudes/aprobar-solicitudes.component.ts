@@ -5,6 +5,8 @@ import { PerfilService } from '../services/perfil.service';
 import { Router } from '@angular/router';
 import { MultaService } from '../services/multa.service';
 import Swal from 'sweetalert2';
+import { Prestamo } from '../prestamo';
+import { PrestamoService } from '../prestamo.service';
 
 @Component({
   selector: 'app-aprobar-solicitudes',
@@ -16,20 +18,23 @@ export class AprobarSolicitudesComponent {
 
 
   filtroBusqueda: string = '';
-   
+    filtroBusqueda2: string = '';
     p: number = 1;  
     itemsPerPage: number = 5;
     solicitudes: Solicitud[];
+    prestamo: any[]; // Cambia el tipo a any[] para aceptar ambos tipos, o usa RenovacionPrestamo[] si tienes la interfaz
 
       constructor(private Materialservicio: MaterialServiceService,
      private route: Router, 
      private usuarioService:PerfilService,
-     private usuarioMulta:MultaService
+     private usuarioMulta:MultaService,
+     private prestamoServicio: PrestamoService,
     ) {
 
   }
 ngOnInit(): void {
     this.obtenerMateriales();
+    this.obtenerSolicitudesRenovacion()
     
   }
   
@@ -87,4 +92,60 @@ ngOnInit(): void {
       }
     });
   }
+
+
+  obtenerSolicitudesRenovacion(){
+        this.prestamoServicio.obtenersolicitudesDevulucion().subscribe(dato => {
+      this.prestamo = dato;
+    });
+  }
+
+
+   //metodo para buscar material
+    renovacionesFiltradas(): Prestamo[] {
+      if (!this.filtroBusqueda2.trim()) {
+        return this.prestamo;
+      }
+  
+      const filtro = this.filtroBusqueda2.toLowerCase();
+  
+      const filtrados = this.prestamo.filter(soli =>
+        soli.id_Prestamo?.toString().toLowerCase().includes(filtro) ||
+        soli.usuario.idusuario?.toString().toLowerCase().includes(filtro) ||
+        soli.usuario.carnet?.toString().toLowerCase().includes(filtro) ||
+        soli.materialEntity.titulo?.toLowerCase().includes(filtro) ||
+        soli.fecha_prestamo?.toString().includes(filtro) ||
+        soli.fecha_devolucion?.toString().includes(filtro)||
+        soli.FECHA_DEVOLUCION_REAL?.toString().toLowerCase().includes(filtro) 
+       
+      );
+  
+      // Paginación: Solo devolver los elementos de la página actual
+      return filtrados.slice((this.p - 1) * this.itemsPerPage, this.p * this.itemsPerPage);
+    }
+
+    confirmarRenovacion(idPrestamo: number, aprobado: boolean): void {
+  Swal.fire({
+    title: aprobado ? '¿Aprobar renovación?' : '¿Rechazar renovación?',
+    text: aprobado ? '¿Estás seguro que deseas aprobar esta renovación?' : '¿Estás seguro que deseas rechazar esta renovación?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, confirmar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.prestamoServicio.aprobarRenovacion(idPrestamo, aprobado).subscribe({
+        next: (resp) => {
+          Swal.fire('Éxito', resp, 'success');
+          this.prestamo = this.prestamo.filter(p => p.id_Prestamo !== idPrestamo);
+        },
+        error: (err) => {
+          console.error('Error al procesar la renovación:', err);
+          Swal.fire('Error', 'No se pudo procesar la renovación', 'error');
+        }
+      });
+    }
+  });
+}
+
 }

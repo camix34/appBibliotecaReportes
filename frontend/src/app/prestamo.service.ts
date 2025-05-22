@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Prestamo } from './prestamo';
 import { Observable } from 'rxjs';
+import { RenovacionPrestamo } from './renovacion-prestamo';
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +27,27 @@ export class PrestamoService {
  }
 
 
- // Método para obtener la lista de idiomas
+ // Método para obtener la lista de prestamos
   obtenerListaPrestamosActivos(): Observable<Prestamo[]> {
     return this.httpClient.get<[Prestamo]>(`${this.baseURL}/prestamos`);
   }
 
+   // Método para obtener la lista de solicitudes de renovacion
+  obtenersolicitudesDevulucion(): Observable<RenovacionPrestamo[]> {
+    return this.httpClient.get<[RenovacionPrestamo]>(`${this.baseURL}/prestamos/renovaciones/pendientes`);
+  }
+
+  //metodo para aprobar renovacion
+ 
+
+  aprobarRenovacion(idPrestamo: number, aprobado: boolean): Observable<string> {
+    const url = `${this.baseURL}/prestamos/${idPrestamo}/aprobar-renovacion?aprobado=${aprobado}`;
+    return this.httpClient.put(url, {}, { responseType: 'text' as 'text' });
 }
+
+}
+
+
+
+
+

@@ -1,5 +1,6 @@
 package com.example.sistemabiblioteca.Controllers;
 
+import java.sql.Date;
 import java.util.List;
 
 import java.util.Optional;
@@ -154,14 +155,59 @@ public ResponseEntity<List<PrestamoEntity>> obtenerPrestamosPorUsuario(@PathVari
     
     //renovar prestamo
 @PutMapping("/prestamos/{idprestamo}/renovar")
-public ResponseEntity<String> renovarPrestamo(@PathVariable Long idprestamo) {
-    try {
-        prestamoService.renovarPrestamo(idprestamo);
-        return ResponseEntity.ok("Préstamo renovado correctamente con 3 meses más.");
-    } catch (RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+public ResponseEntity<String> solicitarRenovacionPrestamo(@PathVariable Long idprestamo) {
+    Optional<PrestamoEntity> prestamoOpt = prestamoRepository.findById(idprestamo);
+
+    if (!prestamoOpt.isPresent()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Préstamo no encontrado");
     }
+
+    PrestamoEntity prestamo = prestamoOpt.get();
+
+    if ("PENDIENTE".equalsIgnoreCase(prestamo.getEstadoRenovacion())) {
+        return ResponseEntity.badRequest().body("Ya hay una solicitud de renovación pendiente.");
+    }
+
+    // Marcar la renovación como pendiente
+    prestamo.setEstadoRenovacion("PENDIENTE");
+    prestamoRepository.save(prestamo);
+
+    return ResponseEntity.ok("Solicitud de renovación enviada. Esperando aprobación del bibliotecario.");
 }
 
+
+// aprueba la solicitud de prestamo
+@PutMapping("/prestamos/{idprestamo}/aprobar-renovacion")
+public ResponseEntity<String> aprobarRenovacion(@PathVariable Long idprestamo, @RequestParam("aprobado") boolean aprobado) {
+    Optional<PrestamoEntity> prestamoOpt = prestamoRepository.findById(idprestamo);
+
+    if (!prestamoOpt.isPresent()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Préstamo no encontrado");
+    }
+
+    PrestamoEntity prestamo = prestamoOpt.get();
+
+    if (!"PENDIENTE".equalsIgnoreCase(prestamo.getEstadoRenovacion())) {
+        return ResponseEntity.badRequest().body("No hay solicitud de renovación pendiente para este préstamo.");
+    }
+
+    if (aprobado) {
+        Date nuevaFecha = new Date(prestamo.getFecha_devolucion().getTime() + 90L * 24 * 60 * 60 * 1000); // 3 meses más para el profesor
+        prestamo.setFecha_devolucion(new java.sql.Date(nuevaFecha.getTime()));
+        prestamo.setEstadoRenovacion("APROBADO");
+        prestamoRepository.save(prestamo);
+        return ResponseEntity.ok("Renovación aprobada y fecha de devolución extendida.");
+    } else {
+        prestamo.setEstadoRenovacion("RECHAZADO");
+        prestamoRepository.save(prestamo);
+        return ResponseEntity.ok("Renovación rechazada por el bibliotecario.");
+    }
+}
+//ver las solicitudes de removacion de prestamos
+@GetMapping("/prestamos/renovaciones/pendientes")
+public ResponseEntity<List<PrestamoEntity>> obtenerRenovacionesPendientes() {
+    List<PrestamoEntity> pendientes = prestamoRepository.findByEstadoRenovacion("PENDIENTE");
+    return ResponseEntity.ok(pendientes);
+}
 
 }
